@@ -1,3 +1,5 @@
+pub mod hist_parser;
+
 use std::env;
 use std::path::PathBuf;
 
