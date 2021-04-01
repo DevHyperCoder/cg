@@ -41,6 +41,38 @@ pub fn run() {
     for line in all_hist.lines() {
         lines.push(line.trim().to_string());
     }
+    let hist_vec = hist_parser::parse_history(lines);
 
-    println!("{:?}", hist_parser::parse_history(lines));
+    let mut cmd_map = generate_cmd_hash_map(hist_vec);
+
+    let sorted_map = sort_cmd_hash_map(&mut cmd_map);
+
+    println!("{:?}",sorted_map);
+}
+
+fn sort_cmd_hash_map(hist_map : &mut HashMap<String,u32>) ->  Vec<(&String,&u32)> {
+    let mut hist_vec:Vec<(&String,&u32)> = hist_map.iter().collect();
+    hist_vec.sort_by(|a,b| b.1.cmp(&a.1));
+    hist_vec
+}
+
+use std::collections::HashMap;
+use hist_parser::History;
+
+fn generate_cmd_hash_map(hist_vec:  Vec<History>) -> HashMap<String,u32> {
+    let mut hash = HashMap::new();
+    for hist in hist_vec {
+        *hash.entry(hist.cmd).or_insert(0) +=1;
+    }
+    hash
+}
+
+use data_parser::{parse_data, Data};
+
+fn get_data(path: PathBuf) -> Vec<Data> {
+    use std::fs;
+
+    let file_content = fs::read_to_string(path).expect("Unable to read the file");
+
+    parse_data(file_content.split("\n").collect::<Vec<&str>>())
 }

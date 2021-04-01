@@ -9,6 +9,9 @@ fn test_history_parse() {
         "3 head -n 10".to_owned(),
         "4 sed11q-wrapper".to_owned(),
         "5 audio-control -i".to_owned(),
+        "6 ../".to_owned(),
+        "7 /tmp -i".to_owned(),
+        "8 /mnt/old -i".to_owned(),
     ];
 
     let expected_history = vec![
@@ -35,6 +38,18 @@ fn test_history_parse() {
         History {
             hist_num: 5,
             cmd: "audio-control".to_owned(),
+        },
+        History {
+            hist_num: 6,
+            cmd: "../".to_owned(),
+        },
+        History {
+            hist_num: 7,
+            cmd: "/tmp".to_owned(),
+        },
+        History {
+            hist_num: 8,
+            cmd: "/mnt/old".to_owned(),
         },
     ];
 

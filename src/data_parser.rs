@@ -8,7 +8,7 @@ pub struct Data {
 }
 
 // For now, we don't care abt the date regex.
-pub fn parse_data(lines: Vec<String>) -> Vec<Data> {
+pub fn parse_data(lines: Vec<&str>) -> Vec<Data> {
     let re = Regex::new("^([0-9]+)\\s([0-9]{2}-[0-9]{2}-[0-9]{4})").unwrap();
 
     let mut data_vec = vec![];

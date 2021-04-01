@@ -2,7 +2,7 @@ use cg::data_parser::{parse_data, Data};
 
 #[test]
 fn test_data_parse() {
-    let data_line = vec!["0 20-03-2020".to_owned(), "69 21-03-2020".to_owned()];
+    let data_line = vec!["0 20-03-2020", "69 21-03-2020"];
 
     let expected_data = vec![
         Data {
