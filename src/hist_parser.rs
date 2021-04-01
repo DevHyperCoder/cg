@@ -1,4 +1,4 @@
-#[derive(Eq, PartialEq,Ord,PartialOrd, Debug)]
+#[derive(Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub struct History {
     pub hist_num: u32,
     pub cmd: String,
@@ -11,7 +11,7 @@ pub fn parse_history(lines: Vec<String>) -> Vec<History> {
 
     let mut hist_vec = vec![];
     for i in lines {
-        let a =format!("{} fail",i); 
+        let a = format!("{} fail", i);
         let cap = hist_regex.captures(&i).expect(&a); // TODO Potential bug
 
         let num = cap.get(1).map_or("", |m| m.as_str());
