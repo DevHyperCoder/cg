@@ -1,14 +1,15 @@
 pub mod data_parser;
+pub mod format;
 pub mod hist_parser;
 
-use std::io::Read;
+use std::collections::HashMap;
 use std::env;
 use std::io::stdin;
+use std::io::Read;
 use std::path::PathBuf;
-use std::collections::HashMap;
 
-use hist_parser::History;
 use data_parser::{parse_data, Data};
+use hist_parser::History;
 
 const HIST_CMD_ENV: &str = "CG_HIST_CMD";
 const DATA_DIR_ENV: &str = "CG_DATA_DIR";
@@ -29,15 +30,19 @@ pub fn get_data_file() -> PathBuf {
 }
 
 pub fn run() {
-    // TODO before release
-    // find a way to get the history into the program
-    // running through cmd does not work currently due to it being a built in
-    // for now, reading stdin
-
-    // Read stdin
     let mut all_hist = String::new();
     stdin().read_to_string(&mut all_hist).unwrap();
 
+    let hist_vec = get_hist_vec(all_hist);
+    let mut cmd_map = generate_cmd_hash_map(hist_vec);
+    let sorted_map = sort_cmd_hash_map(&mut cmd_map);
+
+    use format::format;
+    format(sorted_map);
+    //print_beauty(sorted_map);
+}
+
+fn get_hist_vec(all_hist: String) -> Vec<History> {
     let mut lines = vec![];
 
     // Remove whitespace and push to vector
@@ -45,13 +50,7 @@ pub fn run() {
         lines.push(line.trim().to_string());
     }
 
-    let hist_vec = hist_parser::parse_history(lines);
-
-    let mut cmd_map = generate_cmd_hash_map(hist_vec);
-
-    let sorted_map = sort_cmd_hash_map(&mut cmd_map);
-
-    print_beauty(sorted_map);
+    hist_parser::parse_history(lines)
 }
 
 fn print_beauty(lines: Vec<(&String, &u32)>) {
@@ -73,7 +72,6 @@ fn generate_cmd_hash_map(hist_vec: Vec<History>) -> HashMap<String, u32> {
     }
     hash
 }
-
 
 fn get_data(path: PathBuf) -> Vec<Data> {
     use std::fs;
