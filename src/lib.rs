@@ -8,7 +8,7 @@ use std::io::stdin;
 use std::io::Read;
 use std::path::PathBuf;
 
-use data_parser::{parse_data, Data};
+use format::format;
 use hist_parser::History;
 
 const HIST_CMD_ENV: &str = "CG_HIST_CMD";
@@ -37,9 +37,7 @@ pub fn run() {
     let mut cmd_map = generate_cmd_hash_map(hist_vec);
     let sorted_map = sort_cmd_hash_map(&mut cmd_map);
 
-    use format::format;
     format(sorted_map);
-    //print_beauty(sorted_map);
 }
 
 fn get_hist_vec(all_hist: String) -> Vec<History> {
@@ -51,12 +49,6 @@ fn get_hist_vec(all_hist: String) -> Vec<History> {
     }
 
     hist_parser::parse_history(lines)
-}
-
-fn print_beauty(lines: Vec<(&String, &u32)>) {
-    for i in lines {
-        println!("{} {}", i.0, i.1)
-    }
 }
 
 fn sort_cmd_hash_map(hist_map: &mut HashMap<String, u32>) -> Vec<(&String, &u32)> {
@@ -71,12 +63,4 @@ fn generate_cmd_hash_map(hist_vec: Vec<History>) -> HashMap<String, u32> {
         *hash.entry(hist.cmd).or_insert(0) += 1;
     }
     hash
-}
-
-fn get_data(path: PathBuf) -> Vec<Data> {
-    use std::fs;
-
-    let file_content = fs::read_to_string(path).expect("Unable to read the file");
-
-    parse_data(file_content.split("\n").collect::<Vec<&str>>())
 }
