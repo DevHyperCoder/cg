@@ -32,7 +32,7 @@ pub fn format(hist_vec: Vec<(&String, &u32)>) {
             a -= 1;
         }
 
-        println!("{}:{}{}", i.0, space_str, get_nice(&i.1));
+        println!("{}:{}{} ({}%)", i.0, space_str, get_nice(&i.1),i.1);
     }
 }
 
