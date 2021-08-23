@@ -1,4 +1,5 @@
 pub mod data_parser;
+pub mod config;
 pub mod format;
 pub mod hist_parser;
 
@@ -17,17 +18,6 @@ const DATA_FILE_NAME: &str = "data";
 const DEFAULT_HIST_CMD: &str = "history 0";
 const DEFAULT_DATA_DIR: &str = "~/.local/share/cg/";
 
-pub fn get_history_cmd() -> String {
-    env::var(HIST_CMD_ENV).unwrap_or_else(|_| DEFAULT_HIST_CMD.to_string())
-}
-
-pub fn get_data_dir() -> PathBuf {
-    PathBuf::new().join(env::var(DATA_DIR_ENV).unwrap_or_else(|_| DEFAULT_DATA_DIR.to_string()))
-}
-
-pub fn get_data_file() -> PathBuf {
-    PathBuf::new().join(get_data_dir()).join(DATA_FILE_NAME)
-}
 
 pub fn run() {
     let mut all_hist = String::new();
@@ -63,4 +53,16 @@ fn generate_cmd_hash_map(hist_vec: Vec<History>) -> HashMap<String, u32> {
         *hash.entry(hist.cmd).or_insert(0) += 1;
     }
     hash
+}
+
+pub fn get_history_cmd() -> String {
+    env::var(HIST_CMD_ENV).unwrap_or_else(|_| DEFAULT_HIST_CMD.to_string())
+}
+
+pub fn get_data_dir() -> PathBuf {
+    PathBuf::new().join(env::var(DATA_DIR_ENV).unwrap_or_else(|_| DEFAULT_DATA_DIR.to_string()))
+}
+
+pub fn get_data_file() -> PathBuf {
+    PathBuf::new().join(get_data_dir()).join(DATA_FILE_NAME)
 }
